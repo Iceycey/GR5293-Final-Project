@@ -1,2 +1,13 @@
 # Data sources
 
+We decide to do some analysis about New York City. So we look for some data set about New York City that is available online. We find that there are a lot of valuable data sets on the website called NYC open data. After browsing available data sets on this website. We decide to do some analysis about the urban forest in New York City.
+
+The data sets that we are going to use are tree census from 1995, 2005 and 2015. Since all of these three data sets contains one tree information per row, these data sets are pretty large.
+
+Links for our data sources:
+
+https://data.cityofnewyork.us/Environment/1995-Street-Tree-Census/kyad-zm4j
+
+https://data.cityofnewyork.us/Environment/2005-Street-Tree-Census/29bw-z7pj
+
+https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh
