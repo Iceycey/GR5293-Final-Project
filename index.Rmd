@@ -7,3 +7,12 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+As we know,the United States collects census data every ten years. By collecting the census data, the government could use the data to do some analysis and future adjustments. The census data provides us with plenty of information. 
+
+"Tree canopy confers ecological, economic, and social benefits and can be used to enhance neighborhoods disproportionately affected by environmental challenges such as excessive heat, impervious surfaces, and air pollution." Trees are valuable resources for our daily life.
+
+In New York city, the New York City Department of Parks & Recreation also collects the tree census every ten years from 1995. Up until now, we have the access toward three decades' tree census data. This data information gives us opportunities to analyze the density change over these three decades. Trees' health is strongly affected by neighbor. So, the trees' health condition in the dataset can help us to determine the suitable tree species for different district with various surroundings. By collecting these three decades information about urban forest, we can compare the change of favorable tree species.
+
+
+
+
