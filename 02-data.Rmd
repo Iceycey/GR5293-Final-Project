@@ -4,6 +4,13 @@ We decide to do some analysis about New York City. So we look for some data set 
 
 The data sets that we are going to use are tree census from 1995, 2005 and 2015. Since all of these three data sets contains one tree information per row, these data sets are pretty large.
 
+For tree census 1995, the data set was created in 2015. And for tree census 2005 and 2015, these two data sets were created in 2016. Since the data was not created right after the tree census, there might be some missing values or missing columns while we compare these three data sets. Perhaps the 1995 tree census data set was created based on past record, so, the items that were recorded might differ from current standard.
+
+For the data set of tree census 1995, there are 517k rows and 30 columns. For the data set of tree census 2005, there are 592k rows and 54 columns. For the data set of tree census 2015, there are 684K rows and 45 columns. These data sets provides us very precise information about each trees.
+
+Our analysis is focus on overview of the urban forest. So, we will select several columns to do some data analysis and data visualization.
+
+
 Links for our data sources:
 
 https://data.cityofnewyork.us/Environment/1995-Street-Tree-Census/kyad-zm4j
