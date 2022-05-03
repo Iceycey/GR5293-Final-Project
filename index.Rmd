@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "NYC Trees Analysis"
+author: "Xilin Huang & Pengfei Yan"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
