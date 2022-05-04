@@ -23,7 +23,7 @@
 <meta name="author" content="Xilin Huang &amp; Pengfei Yan" />
 
 
-<meta name="date" content="2022-05-03" />
+<meta name="date" content="2022-05-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -104,6 +104,72 @@
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1 hasAnchor" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Missing values<a href="missing-values.html#missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Missing value by column for tree census 1995</p>
+<pre><code>##                      BIN                      BBL         Council.District 
+##                   256748                   256748                   236899 
+##             House_Number         CensusTract_2010         CensusBlock_2010 
+##                   222944                    23299                    23299 
+##       Sidewalk_Condition                 RecordId                  Address 
+##                    21273                        0                        0 
+##                   Street        Postcode_Original Community.Board_Original 
+##                        0                        0                        0 
+##                     Site                  Species                 Diameter 
+##                        0                        0                        0 
+##                Condition                    Wires        Support_Structure 
+##                        0                        0                        0 
+##                  Borough                        X                        Y 
+##                        0                        0                        0 
+##                Longitude                 Latitude                   CB_New 
+##                        0                        0                        0 
+##                  Zip_New                 NTA_2010                SegmentID 
+##                        0                        0                        0 
+##               Spc_Common                Spc_Latin                 Location 
+##                        0                        0                        0</code></pre>
+<p>Missing value by column for tree census 2005</p>
+<pre><code>##      boro_ct          bin          bbl census.tract     OBJECTID     cen_year 
+##       105310        49625        49625        22914            0            0 
+##     tree_dbh      address     tree_loc     pit_type     soil_lvl       status 
+##            0            0            0            0            0            0 
+##    spc_latin   spc_common   vert_other    vert_pgrd    vert_tgrd    vert_wall 
+##            0            0            0            0            0            0 
+##    horz_blck   horz_grate   horz_plant   horz_other   sidw_crack   sidw_raise 
+##            0            0            0            0            0            0 
+##    wire_htap   wire_prime     wire_2nd   wire_other   inf_canopy    inf_guard 
+##            0            0            0            0            0            0 
+##    inf_wires   inf_paving   inf_outlet    inf_shoes   inf_lights    inf_other 
+##            0            0            0            0            0            0 
+##    trunk_dmg      zipcode     zip_city       cb_num     borocode     boroname 
+##            0            0            0            0            0            0 
+##     cncldist     st_assem    st_senate          nta     nta_name        state 
+##            0            0            0            0            0            0 
+##     latitude    longitude         x_sp         y_sp   objectid_1   Location.1 
+##            0            0            0            0            0            0</code></pre>
+<p>Missing value by column for tree census 2015</p>
+<pre><code>##              bin              bbl council.district     census.tract 
+##             9559             9559             6519             6519 
+##          tree_id         block_id       created_at         tree_dbh 
+##                0                0                0                0 
+##       stump_diam         curb_loc           status           health 
+##                0                0                0                0 
+##        spc_latin       spc_common          steward           guards 
+##                0                0                0                0 
+##         sidewalk        user_type         problems       root_stone 
+##                0                0                0                0 
+##       root_grate       root_other       trunk_wire       trnk_light 
+##                0                0                0                0 
+##       trnk_other       brch_light        brch_shoe       brch_other 
+##                0                0                0                0 
+##          address         postcode         zip_city  community.board 
+##                0                0                0                0 
+##         borocode          borough         cncldist         st_assem 
+##                0                0                0                0 
+##        st_senate              nta         nta_name          boro_ct 
+##                0                0                0                0 
+##            state         latitude        longitude             x_sp 
+##                0                0                0                0 
+##             y_sp 
+##                0</code></pre>
+<p>From the results shown above, we can see that missing values often occurs at BIN, BBL, boro_ct, census_tract and so on. Luckily, during our analysis, we don’t need these information.</p>
 
 </div>
             </section>

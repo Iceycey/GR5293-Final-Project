@@ -23,7 +23,7 @@
 <meta name="author" content="Xilin Huang &amp; Pengfei Yan" />
 
 
-<meta name="date" content="2022-05-03" />
+<meta name="date" content="2022-05-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -153,7 +153,7 @@
 <h2><span class="header-section-number">3.2</span> Data Transformation<a href="data-transformation.html#data-transformation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In our analysis, we will not use all of the information listed in the datasets. So, we need to filter out useful columns for our analysis.</p>
 <p>For our analysis, we need the following variables: the ID of the tree, the name of tree’s species, the postcode of tree’s location, the borough of tree’s location and the diameter of stump.</p>
-<p>For tree census</p>
+<p>Show part of the tree census 1995 after selection:</p>
 <pre><code>##   ID             Species Postcode   Borough Diameter Year
 ## 1  1 PLATANUS ACERIFOLIA    10003 Manhattan        8 1995
 ## 2  2    ACER PLATANOIDES    10013 Manhattan        7 1995
@@ -161,6 +161,7 @@
 ## 4  4    ACER PLATANOIDES    10013 Manhattan        7 1995
 ## 5  5    ACER PLATANOIDES    10013 Manhattan        6 1995
 ## 6  6    SOPHORA JAPONICA    10013 Manhattan        6 1995</code></pre>
+<p>Show part of the tree census 2005 after selection:</p>
 <pre><code>##       ID                                Species Postcode  Borough Diameter Year
 ## 1 592373                       PYRUS CALLERYANA    11219 Brooklyn        6 2005
 ## 2 592374                    PLATANUS ACERIFOLIA    11234 Brooklyn        6 2005
@@ -168,6 +169,7 @@
 ## 4 592376                    PLATANUS ACERIFOLIA    11234 Brooklyn       13 2005
 ## 5 592377                    PLATANUS ACERIFOLIA    11234 Brooklyn       15 2005
 ## 6 592378                    PLATANUS ACERIFOLIA    11234 Brooklyn       21 2005</code></pre>
+<p>Show part of the tree census 2015 after selection:</p>
 <pre><code>##       ID                            Species Postcode   Borough Diameter Year
 ## 1 180683                        Acer rubrum    11375    Queens        3 2015
 ## 2 200540                  Quercus palustris    11357    Queens       21 2015

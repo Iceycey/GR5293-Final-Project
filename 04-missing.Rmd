@@ -18,4 +18,4 @@ colSums(is.na(census2015))%>%
   sort(decreasing = TRUE)
 ```
 
-From the results shown above, we can see that missing values often occurs
+From the results shown above, we can see that missing values often occurs at BIN, BBL, boro_ct, census_tract and so on. Luckily, during our analysis, we don't need these information.
