@@ -1,1 +1,21 @@
 # Missing values
+
+Missing value by column for tree census 1995
+```{r}
+colSums(is.na(census1995))%>%
+  sort(decreasing = TRUE)
+```
+
+Missing value by column for tree census 2005
+```{r}
+colSums(is.na(census2005))%>%
+  sort(decreasing = TRUE)
+```
+
+Missing value by column for tree census 2015
+```{r}
+colSums(is.na(census2015))%>%
+  sort(decreasing = TRUE)
+```
+
+From the results shown above, we can see that missing values often occurs

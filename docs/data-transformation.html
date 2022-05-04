@@ -74,7 +74,11 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#load-datasets"><i class="fa fa-check"></i><b>3.1</b> Load datasets</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#data-transformation-1"><i class="fa fa-check"></i><b>3.2</b> Data Transformation</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -100,7 +104,79 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation<a href="data-transformation.html#data-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Since the data from these three decades contains different number and names of columns, we need to standardize the dataset column for further analysis.</p>
+<div id="load-datasets" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Load datasets<a href="data-transformation.html#load-datasets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Print column names of census 1995</p>
+<pre><code>##  [1] &quot;RecordId&quot;                 &quot;Address&quot;                 
+##  [3] &quot;House_Number&quot;             &quot;Street&quot;                  
+##  [5] &quot;Postcode_Original&quot;        &quot;Community.Board_Original&quot;
+##  [7] &quot;Site&quot;                     &quot;Species&quot;                 
+##  [9] &quot;Diameter&quot;                 &quot;Condition&quot;               
+## [11] &quot;Wires&quot;                    &quot;Sidewalk_Condition&quot;      
+## [13] &quot;Support_Structure&quot;        &quot;Borough&quot;                 
+## [15] &quot;X&quot;                        &quot;Y&quot;                       
+## [17] &quot;Longitude&quot;                &quot;Latitude&quot;                
+## [19] &quot;CB_New&quot;                   &quot;Zip_New&quot;                 
+## [21] &quot;CensusTract_2010&quot;         &quot;CensusBlock_2010&quot;        
+## [23] &quot;NTA_2010&quot;                 &quot;SegmentID&quot;               
+## [25] &quot;Spc_Common&quot;               &quot;Spc_Latin&quot;               
+## [27] &quot;Location&quot;                 &quot;Council.District&quot;        
+## [29] &quot;BIN&quot;                      &quot;BBL&quot;</code></pre>
+<p>Print column names of census 2005</p>
+<pre><code>##  [1] &quot;OBJECTID&quot;     &quot;cen_year&quot;     &quot;tree_dbh&quot;     &quot;address&quot;      &quot;tree_loc&quot;    
+##  [6] &quot;pit_type&quot;     &quot;soil_lvl&quot;     &quot;status&quot;       &quot;spc_latin&quot;    &quot;spc_common&quot;  
+## [11] &quot;vert_other&quot;   &quot;vert_pgrd&quot;    &quot;vert_tgrd&quot;    &quot;vert_wall&quot;    &quot;horz_blck&quot;   
+## [16] &quot;horz_grate&quot;   &quot;horz_plant&quot;   &quot;horz_other&quot;   &quot;sidw_crack&quot;   &quot;sidw_raise&quot;  
+## [21] &quot;wire_htap&quot;    &quot;wire_prime&quot;   &quot;wire_2nd&quot;     &quot;wire_other&quot;   &quot;inf_canopy&quot;  
+## [26] &quot;inf_guard&quot;    &quot;inf_wires&quot;    &quot;inf_paving&quot;   &quot;inf_outlet&quot;   &quot;inf_shoes&quot;   
+## [31] &quot;inf_lights&quot;   &quot;inf_other&quot;    &quot;trunk_dmg&quot;    &quot;zipcode&quot;      &quot;zip_city&quot;    
+## [36] &quot;cb_num&quot;       &quot;borocode&quot;     &quot;boroname&quot;     &quot;cncldist&quot;     &quot;st_assem&quot;    
+## [41] &quot;st_senate&quot;    &quot;nta&quot;          &quot;nta_name&quot;     &quot;boro_ct&quot;      &quot;state&quot;       
+## [46] &quot;latitude&quot;     &quot;longitude&quot;    &quot;x_sp&quot;         &quot;y_sp&quot;         &quot;objectid_1&quot;  
+## [51] &quot;census.tract&quot; &quot;bin&quot;          &quot;bbl&quot;          &quot;Location.1&quot;</code></pre>
+<p>Print column names of census 2015</p>
+<pre><code>##  [1] &quot;tree_id&quot;          &quot;block_id&quot;         &quot;created_at&quot;       &quot;tree_dbh&quot;        
+##  [5] &quot;stump_diam&quot;       &quot;curb_loc&quot;         &quot;status&quot;           &quot;health&quot;          
+##  [9] &quot;spc_latin&quot;        &quot;spc_common&quot;       &quot;steward&quot;          &quot;guards&quot;          
+## [13] &quot;sidewalk&quot;         &quot;user_type&quot;        &quot;problems&quot;         &quot;root_stone&quot;      
+## [17] &quot;root_grate&quot;       &quot;root_other&quot;       &quot;trunk_wire&quot;       &quot;trnk_light&quot;      
+## [21] &quot;trnk_other&quot;       &quot;brch_light&quot;       &quot;brch_shoe&quot;        &quot;brch_other&quot;      
+## [25] &quot;address&quot;          &quot;postcode&quot;         &quot;zip_city&quot;         &quot;community.board&quot; 
+## [29] &quot;borocode&quot;         &quot;borough&quot;          &quot;cncldist&quot;         &quot;st_assem&quot;        
+## [33] &quot;st_senate&quot;        &quot;nta&quot;              &quot;nta_name&quot;         &quot;boro_ct&quot;         
+## [37] &quot;state&quot;            &quot;latitude&quot;         &quot;longitude&quot;        &quot;x_sp&quot;            
+## [41] &quot;y_sp&quot;             &quot;council.district&quot; &quot;census.tract&quot;     &quot;bin&quot;             
+## [45] &quot;bbl&quot;</code></pre>
+</div>
+<div id="data-transformation-1" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Data Transformation<a href="data-transformation.html#data-transformation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In our analysis, we will not use all of the information listed in the datasets. So, we need to filter out useful columns for our analysis.</p>
+<p>For our analysis, we need the following variables: the ID of the tree, the name of tree’s species, the postcode of tree’s location, the borough of tree’s location and the diameter of stump.</p>
+<p>For tree census</p>
+<pre><code>##   ID             Species Postcode   Borough Diameter Year
+## 1  1 PLATANUS ACERIFOLIA    10003 Manhattan        8 1995
+## 2  2    ACER PLATANOIDES    10013 Manhattan        7 1995
+## 3  3    ACER PLATANOIDES    10013 Manhattan        6 1995
+## 4  4    ACER PLATANOIDES    10013 Manhattan        7 1995
+## 5  5    ACER PLATANOIDES    10013 Manhattan        6 1995
+## 6  6    SOPHORA JAPONICA    10013 Manhattan        6 1995</code></pre>
+<pre><code>##       ID                                Species Postcode  Borough Diameter Year
+## 1 592373                       PYRUS CALLERYANA    11219 Brooklyn        6 2005
+## 2 592374                    PLATANUS ACERIFOLIA    11234 Brooklyn        6 2005
+## 3 592375 ACER PLATANOIDES          CRIMSON KING    11234 Brooklyn       13 2005
+## 4 592376                    PLATANUS ACERIFOLIA    11234 Brooklyn       13 2005
+## 5 592377                    PLATANUS ACERIFOLIA    11234 Brooklyn       15 2005
+## 6 592378                    PLATANUS ACERIFOLIA    11234 Brooklyn       21 2005</code></pre>
+<pre><code>##       ID                            Species Postcode   Borough Diameter Year
+## 1 180683                        Acer rubrum    11375    Queens        3 2015
+## 2 200540                  Quercus palustris    11357    Queens       21 2015
+## 3 204026 Gleditsia triacanthos var. inermis    11211  Brooklyn        3 2015
+## 4 204337 Gleditsia triacanthos var. inermis    11211  Brooklyn       10 2015
+## 5 189565                    Tilia americana    11215  Brooklyn       21 2015
+## 6 190422 Gleditsia triacanthos var. inermis    10023 Manhattan       11 2015</code></pre>
 
+</div>
 </div>
             </section>
 

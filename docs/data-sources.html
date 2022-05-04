@@ -74,7 +74,11 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#load-datasets"><i class="fa fa-check"></i><b>3.1</b> Load datasets</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#data-transformation-1"><i class="fa fa-check"></i><b>3.2</b> Data Transformation</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -102,6 +106,9 @@
 <h1><span class="header-section-number">Chapter 2</span> Data sources<a href="data-sources.html#data-sources" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>We decide to do some analysis about New York City. So we look for some data set about New York City that is available online. We find that there are a lot of valuable data sets on the website called NYC open data. After browsing available data sets on this website. We decide to do some analysis about the urban forest in New York City.</p>
 <p>The data sets that we are going to use are tree census from 1995, 2005 and 2015. Since all of these three data sets contains one tree information per row, these data sets are pretty large.</p>
+<p>For tree census 1995, the data set was created in 2015. And for tree census 2005 and 2015, these two data sets were created in 2016. Since the data was not created right after the tree census, there might be some missing values or missing columns while we compare these three data sets. Perhaps the 1995 tree census data set was created based on past record, so, the items that were recorded might differ from current standard.</p>
+<p>For the data set of tree census 1995, there are 517k rows and 30 columns. For the data set of tree census 2005, there are 592k rows and 54 columns. For the data set of tree census 2015, there are 684K rows and 45 columns. These data sets provides us very precise information about each trees.</p>
+<p>Our analysis is focus on overview of the urban forest. So, we will select several columns to do some data analysis and data visualization.</p>
 <p>Links for our data sources:</p>
 <p><a href="https://data.cityofnewyork.us/Environment/1995-Street-Tree-Census/kyad-zm4j" class="uri">https://data.cityofnewyork.us/Environment/1995-Street-Tree-Census/kyad-zm4j</a></p>
 <p><a href="https://data.cityofnewyork.us/Environment/2005-Street-Tree-Census/29bw-z7pj" class="uri">https://data.cityofnewyork.us/Environment/2005-Street-Tree-Census/29bw-z7pj</a></p>

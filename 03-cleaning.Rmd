@@ -1,1 +1,67 @@
 # Data transformation
+
+Since the data from these three decades contains different number and names of columns, we need to standardize the dataset column for further analysis.
+
+## Load datasets
+```{r}
+#load raw datasets
+census1995<-read.csv("1995_Street_Tree_Census.csv")
+census2005<-read.csv("2005_Street_Tree_Census.csv")
+census2015<-read.csv("2015_Street_Tree_Census_-_Tree_Data.csv")
+```
+
+Print column names of census 1995
+```{r}
+colnames(census1995)
+```
+
+Print column names of census 2005
+```{r}
+colnames(census2005)
+```
+
+Print column names of census 2015
+```{r}
+colnames(census2015)
+```
+
+## Data Transformation
+In our analysis, we will not use all of the information listed in the datasets. So, we need to filter out useful columns for our analysis.
+
+For our analysis, we need the following variables: the ID of the tree, the name of tree's species, the postcode of tree's location, the borough of tree's location and the diameter of stump.
+
+Show part of the tree census 1995 after selection:
+```{r}
+library(dplyr)
+#census 1995 transformation
+census1995_1<-census1995%>%
+  select(RecordId,Spc_Latin,Postcode_Original,Borough,Diameter)%>%
+  rename(ID = RecordId,Species = Spc_Latin,Postcode = Postcode_Original)%>%
+  mutate(Year = 1995)
+head(census1995_1)
+```
+
+Show part of the tree census 2005 after selection:
+```{r}
+#census 2005 transformation
+census2005_1<-census2005%>%
+  select(OBJECTID,spc_latin,zipcode,boroname,tree_dbh)%>%
+  rename(ID = OBJECTID, Species = spc_latin,Postcode = zipcode,Borough = boroname,Diameter=tree_dbh)%>%
+  mutate(Year = 2005)
+head(census2005_1)
+```
+
+Show part of the tree census 2015 after selection:
+```{r}
+#census 2015 transformation
+census2015_1<-census2015%>%
+  select(tree_id,spc_latin,postcode,borough,tree_dbh)%>%
+  rename(ID = tree_id,Species = spc_latin,Postcode = postcode,Borough = borough,Diameter = tree_dbh)%>%
+  mutate(Year = 2015)
+head(census2015_1)
+```
+
+```{r}
+#combine these three dataset
+data<-rbind(census1995_1,census2005_1,census2015_1)
+```
