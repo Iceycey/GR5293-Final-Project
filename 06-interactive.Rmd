@@ -1,3 +1,37 @@
 # Interactive component
 
+In this interactive plot, we can find the location of the commonly used trees which are in poor health condition. While we click on each mark for one tree, we can see the specific species of that tree. And the real location for that tree in poor health condition is marked on the map. With this map, we can easily find which tree we need to do some treatment to help them to recover.
 
+Find the top 4 commonly used tree species during 2015 in NYC
+```{r}
+sort(table(census2015_1$Species), decreasing = TRUE)[1:4]
+```
+
+
+```{r}
+library(httr)
+library(rgdal)
+library(sp)
+library(leaflet)
+r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
+nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
+```
+
+We filter out the commonly used tree with poor health condition in 2015.
+```{r}
+tree_point<-census2015%>%
+  filter(health == "Poor")%>%
+  filter(spc_latin=="Platanus x acerifolia"|spc_latin=="Gleditsia triacanthos var. inermis"|spc_latin=="Pyrus calleryana"|spc_latin=="Quercus palustris")%>%
+  select(spc_latin,longitude,latitude)
+head(tree_point)
+```
+
+```{r}
+library(leaflet)
+leaflet(nyc_neighborhoods) %>%
+  addTiles() %>% 
+  addPolygons(popup = ~neighborhood) %>% 
+  addMarkers(~longitude, ~latitude, popup = ~spc_latin, data = tree_point) %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  setView(-73.98, 40.75, zoom = 13)
+```
