@@ -1,4 +1,5 @@
 # Results
+<<<<<<< HEAD
 
 In this section we will explore deeper into the management of NYC tree ecosystem. We will discuss and identify potnetial problems through data visualizations in aspects such as tree diversity, tree health, tree size and the surrounding structure of trees.
 
@@ -9,15 +10,28 @@ We can see that from 1995 to 2015, the quantity of Norway Maple falls substantia
 The amount and distribution of London Planetree remain relatively stable across all three periods as compared to other types.
 Pin Oak, Honeylocust and Callery Pear all increase substantially in number from 1995 to 2015, indicating healthy growth and polination. 
 However, it should be noted that while Callery Pear boomed at the fastest rate from 1995 to 2005, it actually fell a little in quantity from 2005 to 2015. Therefore, more investigation is needed to identify possible growth-detering factors such as plant diseases.
+=======
+In this section we will explore deeper into the management of NYC tree ecosystem. We will discuss and identify potnetial problems through data visualizations in aspects such as tree diversity, tree health, tree size and the surrounding structure of trees.
+
+Tree Diversity
+
+As seen from the plots of the 5 most popular trees across boroughs in 1995, 2005 and 2015, the most prevalent tree species remain the same throughout the three periods, namely, Normway Maple, London Planetree, Pin Oak, Honeylocust, and Callery Pear.
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
 ```{r}
 #import data
 library(readr)
 library(dplyr)
 library(ggplot2)
 library(gganimate)
+<<<<<<< HEAD
 Tree_Census <- read_csv("1995_Street_Tree_Census.csv")
 Tree_Census2 <- read_csv("2005_Street_Tree_Census.csv")
 Tree_Census3 <- read_csv("2015_Street_Tree_Census.csv")
+=======
+Tree_Census <- read_csv("~/Desktop/1995_Street_Tree_Census.csv")
+Tree_Census2 <- read_csv("~/Desktop/2005_Street_Tree_Census.csv")
+Tree_Census3 <- read_csv("~/Desktop/2015_Street_Tree_Census.csv")
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
 
 #clean data
 Tree_Diversity_Overview <- Tree_Census %>% select(Borough, Spc_Common) %>% rename(Species = Spc_Common)
@@ -30,7 +44,11 @@ Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "Callery pe
 Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "pin oak"] <- "OAK, PIN"
 Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "Norway maple"] <- "MAPLE, NORWAY"
 
+<<<<<<< HEAD
 #plot
+=======
+#plots
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
 Tree_Diversity_Overview %>% count(Species) %>% arrange(desc(n))
 Tree_Diversity_Overview %>% filter(Species %in% c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) %>% ggplot( aes(x = Species, fill = Borough)) + 
   geom_bar(position = "stack", na.rm = TRUE, width = 0.5)+
@@ -69,6 +87,7 @@ Tree_Diversity_Overview3 %>% filter(Species %in% c("LONDON PLANETREE", "HONEYLOC
 ```
 
 
+<<<<<<< HEAD
 Next, we look at the ratio of those most popular tree species against all tree species in each zip code area. Due to the limit of 1995 collected data, the plot of year 1995 fails to show the distribution clearly. Therefore, we analyze the changing patterns in these diversity ratios through 2005 and 2015. Since darker colors indicate higher species diversity in the area, tree diversity has increased in almost all areas on the map over these two periods. This trend is especially salient in the central part(Brooklyn and Queens) of the map.
 ```{r}
 #import data
@@ -345,3 +364,9 @@ Health_Guard_Overview3 %>% na.omit() %>% filter(Health %in% c("Excellent", "Good
   theme(axis.text.x = element_text(size = 8, angle = 30, hjust = 1, vjust = 1))+
   theme(panel.grid.major.x = element_blank()) 
 ```
+=======
+```{r}
+
+```
+
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
