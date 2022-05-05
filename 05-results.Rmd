@@ -1,1 +1,70 @@
 # Results
+In this section we will explore deeper into the management of NYC tree ecosystem. We will discuss and identify potnetial problems through data visualizations in aspects such as tree diversity, tree health, tree size and the surrounding structure of trees.
+
+Tree Diversity
+
+As seen from the plots of the 5 most popular trees across boroughs in 1995, 2005 and 2015, the most prevalent tree species remain the same throughout the three periods, namely, Normway Maple, London Planetree, Pin Oak, Honeylocust, and Callery Pear.
+```{r}
+#import data
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(gganimate)
+Tree_Census <- read_csv("~/Desktop/1995_Street_Tree_Census.csv")
+Tree_Census2 <- read_csv("~/Desktop/2005_Street_Tree_Census.csv")
+Tree_Census3 <- read_csv("~/Desktop/2015_Street_Tree_Census.csv")
+
+#clean data
+Tree_Diversity_Overview <- Tree_Census %>% select(Borough, Spc_Common) %>% rename(Species = Spc_Common)
+Tree_Diversity_Overview2 <- Tree_Census2 %>% select(boroname, spc_common) %>% rename(Borough = boroname, Species = spc_common)
+Tree_Diversity_Overview3 <- Tree_Census3 %>% select(borough, spc_common) %>% rename(Borough = borough, Species = spc_common)
+Tree_Diversity_Overview2$Borough[Tree_Diversity_Overview2$Borough == "5"] <- "Staten Island"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "London planetree"] <- "LONDON PLANETREE"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "honeylocust"] <- "HONEYLOCUST"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "Callery pear"] <- "PEAR, CALLERY"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "pin oak"] <- "OAK, PIN"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "Norway maple"] <- "MAPLE, NORWAY"
+
+#plots
+Tree_Diversity_Overview %>% count(Species) %>% arrange(desc(n))
+Tree_Diversity_Overview %>% filter(Species %in% c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) %>% ggplot( aes(x = Species, fill = Borough)) + 
+  geom_bar(position = "stack", na.rm = TRUE, width = 0.5)+
+  scale_fill_viridis_d() +
+  scale_x_discrete(limits = c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) +
+  xlab("5 most popular species in 1995") +
+  ggtitle("5 most popular tree species across boroughs in 1995") +
+  scale_fill_brewer() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(axis.text.x = element_text(size = 7))
+
+Tree_Diversity_Overview2 %>% count(Species) %>% arrange(desc(n))
+Tree_Diversity_Overview2 %>% filter(Species %in% c("LONDON PLANETREE", "MAPLE, NORWAY","PEAR, CALLERY", "HONEYLOCUST", "OAK, PIN")) %>% ggplot( aes(x = Species, fill = Borough)) + 
+  geom_bar(position = "stack", na.rm = TRUE, width = 0.5)+
+  scale_fill_viridis_d() +
+  scale_x_discrete(limits = c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) +
+  xlab("5 most popular species in 2005") +
+  ggtitle("5 most popular tree species across boroughs in 2005") +
+  scale_fill_brewer() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(axis.text.x = element_text(size = 7))
+
+Tree_Diversity_Overview3 %>% count(Species) %>% arrange(desc(n))
+Tree_Diversity_Overview3 %>% filter(Species %in% c("LONDON PLANETREE", "HONEYLOCUST", "PEAR, CALLERY", "OAK, PIN", "MAPLE, NORWAY")) %>% ggplot( aes(x = Species, fill = Borough)) + 
+  geom_bar(position = "stack", na.rm = TRUE, width = 0.5)+
+  scale_fill_viridis_d() +
+  scale_x_discrete(limits = c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) +
+  xlab("5 most popular species in 2015") +
+  ggtitle("5 most popular tree species across boroughs in 2015") +
+  scale_fill_brewer() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(axis.text.x = element_text(size = 7))
+```
+
+
+```{r}
+
+```
+
