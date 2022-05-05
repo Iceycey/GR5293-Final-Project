@@ -1,0 +1,609 @@
+--- 
+title: "NYC Trees Analysis"
+author: "Xilin Huang & Pengfei Yan"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Introduction
+
+As we know,the United States collects census data every ten years. By collecting the census data, the government could use the data to do some analysis and future adjustments. The census data provides us with plenty of information. 
+
+"Tree canopy confers ecological, economic, and social benefits and can be used to enhance neighborhoods disproportionately affected by environmental challenges such as excessive heat, impervious surfaces, and air pollution." Trees are valuable resources for our daily life.
+
+In New York city, the New York City Department of Parks & Recreation also collects the tree census every ten years from 1995. Up until now, we have the access toward three decades' tree census data. This data information gives us opportunities to analyze the density change over these three decades. Trees' health is strongly affected by neighbor. So, the trees' health condition in the dataset can help us to determine the suitable tree species for different district with various surroundings. By collecting these three decades information about urban forest, we can compare the change of favorable tree species.
+
+In this report, we will use current available three decades of tree census data sets to do some deep analysis of the urban forest in New York.
+
+
+
+
+
+<!--chapter:end:index.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data sources
+
+We decide to do some analysis about New York City. So we look for some data set about New York City that is available online. We find that there are a lot of valuable data sets on the website called NYC open data. After browsing available data sets on this website. We decide to do some analysis about the urban forest in New York City.
+
+The data sets that we are going to use are tree census from 1995, 2005 and 2015. Since all of these three data sets contains one tree information per row, these data sets are pretty large.
+
+For tree census 1995, the data set was created in 2015. And for tree census 2005 and 2015, these two data sets were created in 2016. Since the data was not created right after the tree census, there might be some missing values or missing columns while we compare these three data sets. Perhaps the 1995 tree census data set was created based on past record, so, the items that were recorded might differ from current standard.
+
+For the data set of tree census 1995, there are 517k rows and 30 columns. For the data set of tree census 2005, there are 592k rows and 54 columns. For the data set of tree census 2015, there are 684K rows and 45 columns. These data sets provides us very precise information about each trees.
+
+Our analysis is focus on overview of the urban forest. So, we will select several columns to do some data analysis and data visualization.
+
+
+Links for our data sources:
+
+https://data.cityofnewyork.us/Environment/1995-Street-Tree-Census/kyad-zm4j
+
+https://data.cityofnewyork.us/Environment/2005-Street-Tree-Census/29bw-z7pj
+
+https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh
+
+<!--chapter:end:02-data.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data transformation
+
+Since the data from these three decades contains different number and names of columns, we need to standardize the dataset column for further analysis.
+
+## Load datasets
+```{r}
+#load raw datasets
+census1995<-read.csv("1995_Street_Tree_Census.csv")
+census2005<-read.csv("2005_Street_Tree_Census.csv")
+census2015<-read.csv("2015_Street_Tree_Census_-_Tree_Data.csv")
+```
+
+Print column names of census 1995
+```{r}
+colnames(census1995)
+```
+
+Print column names of census 2005
+```{r}
+colnames(census2005)
+```
+
+Print column names of census 2015
+```{r}
+colnames(census2015)
+```
+
+## Data Transformation
+In our analysis, we will not use all of the information listed in the datasets. So, we need to filter out useful columns for our analysis.
+
+For our analysis, we need the following variables: the ID of the tree, the name of tree's species, the postcode of tree's location, the borough of tree's location and the diameter of stump.
+
+Show part of the tree census 1995 after selection:
+```{r}
+library(dplyr)
+#census 1995 transformation
+census1995_1<-census1995%>%
+  select(RecordId,Spc_Latin,Postcode_Original,Borough,Diameter)%>%
+  rename(ID = RecordId,Species = Spc_Latin,Postcode = Postcode_Original)%>%
+  mutate(Year = 1995)
+head(census1995_1)
+```
+
+Show part of the tree census 2005 after selection:
+```{r}
+#census 2005 transformation
+census2005_1<-census2005%>%
+  select(OBJECTID,spc_latin,zipcode,boroname,tree_dbh)%>%
+  rename(ID = OBJECTID, Species = spc_latin,Postcode = zipcode,Borough = boroname,Diameter=tree_dbh)%>%
+  mutate(Year = 2005)
+head(census2005_1)
+```
+
+Show part of the tree census 2015 after selection:
+```{r}
+#census 2015 transformation
+census2015_1<-census2015%>%
+  select(tree_id,spc_latin,postcode,borough,tree_dbh)%>%
+  rename(ID = tree_id,Species = spc_latin,Postcode = postcode,Borough = borough,Diameter = tree_dbh)%>%
+  mutate(Year = 2015)
+head(census2015_1)
+```
+
+```{r}
+#combine these three dataset
+data<-rbind(census1995_1,census2005_1,census2015_1)
+```
+
+<!--chapter:end:03-cleaning.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Missing values
+
+Missing value by column for tree census 1995
+```{r}
+colSums(is.na(census1995))%>%
+  sort(decreasing = TRUE)
+```
+
+Missing value by column for tree census 2005
+```{r}
+colSums(is.na(census2005))%>%
+  sort(decreasing = TRUE)
+```
+
+Missing value by column for tree census 2015
+```{r}
+colSums(is.na(census2015))%>%
+  sort(decreasing = TRUE)
+```
+
+From the results shown above, we can see that missing values often occurs at BIN, BBL, boro_ct, census_tract and so on. Luckily, during our analysis, we don't need these information.
+
+<!--chapter:end:04-missing.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Results
+<<<<<<< HEAD
+
+In this section we will explore deeper into the management of NYC tree ecosystem. We will discuss and identify potnetial problems through data visualizations in aspects such as tree diversity, tree health, tree size and the surrounding structure of trees.
+
+Tree Diversity:
+
+First of all, let's take a look at the changing patterns of the 5 most popular tree species across NYC boroughs in 1995, 2005 and 2015, since they occupy a significant portion of the overall tree diversity system. The most prevalent tree species remain the same throughout the three periods, namely, Normway Maple, London Planetree, Pin Oak, Honeylocust, and Callery Pear.
+We can see that from 1995 to 2015, the quantity of Norway Maple falls substantially from over 100000 to less than 37000. Looking at the distribution across boroughs, we see that Manhattan has very few Norway Maple and most of the reduction comes from Queens. 
+The amount and distribution of London Planetree remain relatively stable across all three periods as compared to other types.
+Pin Oak, Honeylocust and Callery Pear all increase substantially in number from 1995 to 2015, indicating healthy growth and polination. 
+However, it should be noted that while Callery Pear boomed at the fastest rate from 1995 to 2005, it actually fell a little in quantity from 2005 to 2015. Therefore, more investigation is needed to identify possible growth-detering factors such as plant diseases.
+=======
+In this section we will explore deeper into the management of NYC tree ecosystem. We will discuss and identify potnetial problems through data visualizations in aspects such as tree diversity, tree health, tree size and the surrounding structure of trees.
+
+Tree Diversity
+
+As seen from the plots of the 5 most popular trees across boroughs in 1995, 2005 and 2015, the most prevalent tree species remain the same throughout the three periods, namely, Normway Maple, London Planetree, Pin Oak, Honeylocust, and Callery Pear.
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
+```{r}
+#import data
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(gganimate)
+<<<<<<< HEAD
+Tree_Census <- read_csv("1995_Street_Tree_Census.csv")
+Tree_Census2 <- read_csv("2005_Street_Tree_Census.csv")
+Tree_Census3 <- read_csv("2015_Street_Tree_Census.csv")
+=======
+Tree_Census <- read_csv("~/Desktop/1995_Street_Tree_Census.csv")
+Tree_Census2 <- read_csv("~/Desktop/2005_Street_Tree_Census.csv")
+Tree_Census3 <- read_csv("~/Desktop/2015_Street_Tree_Census.csv")
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
+
+#clean data
+Tree_Diversity_Overview <- Tree_Census %>% select(Borough, Spc_Common) %>% rename(Species = Spc_Common)
+Tree_Diversity_Overview2 <- Tree_Census2 %>% select(boroname, spc_common) %>% rename(Borough = boroname, Species = spc_common)
+Tree_Diversity_Overview3 <- Tree_Census3 %>% select(borough, spc_common) %>% rename(Borough = borough, Species = spc_common)
+Tree_Diversity_Overview2$Borough[Tree_Diversity_Overview2$Borough == "5"] <- "Staten Island"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "London planetree"] <- "LONDON PLANETREE"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "honeylocust"] <- "HONEYLOCUST"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "Callery pear"] <- "PEAR, CALLERY"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "pin oak"] <- "OAK, PIN"
+Tree_Diversity_Overview3$Species[Tree_Diversity_Overview3$Species == "Norway maple"] <- "MAPLE, NORWAY"
+
+<<<<<<< HEAD
+#plot
+=======
+#plots
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
+Tree_Diversity_Overview %>% count(Species) %>% arrange(desc(n))
+Tree_Diversity_Overview %>% filter(Species %in% c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) %>% ggplot( aes(x = Species, fill = Borough)) + 
+  geom_bar(position = "stack", na.rm = TRUE, width = 0.5)+
+  scale_fill_viridis_d() +
+  scale_x_discrete(limits = c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) +
+  xlab("5 most popular species in 1995") +
+  ggtitle("5 most popular tree species across boroughs in 1995") +
+  scale_fill_brewer() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(axis.text.x = element_text(size = 7))
+
+Tree_Diversity_Overview2 %>% count(Species) %>% arrange(desc(n))
+Tree_Diversity_Overview2 %>% filter(Species %in% c("LONDON PLANETREE", "MAPLE, NORWAY","PEAR, CALLERY", "HONEYLOCUST", "OAK, PIN")) %>% ggplot( aes(x = Species, fill = Borough)) + 
+  geom_bar(position = "stack", na.rm = TRUE, width = 0.5)+
+  scale_fill_viridis_d() +
+  scale_x_discrete(limits = c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) +
+  xlab("5 most popular species in 2005") +
+  ggtitle("5 most popular tree species across boroughs in 2005") +
+  scale_fill_brewer() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(axis.text.x = element_text(size = 7))
+
+Tree_Diversity_Overview3 %>% count(Species) %>% arrange(desc(n))
+Tree_Diversity_Overview3 %>% filter(Species %in% c("LONDON PLANETREE", "HONEYLOCUST", "PEAR, CALLERY", "OAK, PIN", "MAPLE, NORWAY")) %>% ggplot( aes(x = Species, fill = Borough)) + 
+  geom_bar(position = "stack", na.rm = TRUE, width = 0.5)+
+  scale_fill_viridis_d() +
+  scale_x_discrete(limits = c("MAPLE, NORWAY", "LONDON PLANETREE", "OAK, PIN", "HONEYLOCUST", "PEAR, CALLERY")) +
+  xlab("5 most popular species in 2015") +
+  ggtitle("5 most popular tree species across boroughs in 2015") +
+  scale_fill_brewer() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(axis.text.x = element_text(size = 7))
+```
+
+
+<<<<<<< HEAD
+Next, we look at the ratio of those most popular tree species against all tree species in each zip code area. Due to the limit of 1995 collected data, the plot of year 1995 fails to show the distribution clearly. Therefore, we analyze the changing patterns in these diversity ratios through 2005 and 2015. Since darker colors indicate higher species diversity in the area, tree diversity has increased in almost all areas on the map over these two periods. This trend is especially salient in the central part(Brooklyn and Queens) of the map.
+```{r}
+#import data
+data2005<-read.csv("2005_Street_Tree_Census.csv")
+data2015<-read.csv("2015_Street_Tree_Census.csv")
+
+#clean data
+temp1<-data2005[-which(data2005$zipcode==0),]
+temp1$zipcode<-as.factor(temp1$zipcode)
+ratio<-tapply(temp1$spc_common,temp1$zipcode,function(x){sort(table(x),decreasing = T)[1]/length(x)})
+tree_ratio<-data.frame(zip=as.numeric(names(ratio)),ratio=ratio)
+tree_pop_2005_data<-merge(temp1,tree_ratio,by.x = "zipcode", by.y = "zip")
+tree_pop_2005_data<-arrange(tree_pop_2005_data, zipcode, OBJECTID)
+
+#plot
+ggplot(tree_pop_2005_data, aes(x = longitude, y = latitude, group =zipcode, fill = ratio)) +
+  geom_polygon(colour = "grey90",size=0.01) +
+  coord_map("polyconic") +
+  labs(title="The percentage ofthe most popular tree species \n make up in each zip code areain 2005") +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank()) 
+
+#clean data
+temp1<-data2015
+temp1$postcode<-as.factor(temp1$postcode)
+ratio<-tapply(temp1$spc_common,temp1$postcode,function(x){sort(table(x),decreasing = T)[1]/length(x)})
+tree_ratio<-data.frame(zip=as.numeric(names(ratio)),ratio=ratio)
+tree_pop_2015_data<-merge(temp1,tree_ratio,by.x = "postcode", by.y = "zip")
+tree_pop_2015_data<-arrange(tree_pop_2015_data, postcode, tree_id)
+
+#plot
+ggplot(tree_pop_2015_data, aes(x = longitude, y = latitude, group =postcode, fill = ratio)) +
+  geom_polygon(colour = "grey90",size=0.01) +
+  coord_map("polyconic") +
+  labs(title="The percentage ofthe most popular tree species \n make up in each zip code area in 2015") +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank()) 
+```
+
+Tree Health:
+
+Next, we investigate the health conditions of trees across boroughs over the three periods. The result is quite promising. As the animation g1 suggests, the proportion of trees in a good condition in all regions has increased, while the proportion of trees with a poor condition in all regions has decreased.
+Additionally, we would like to focus on the ratio of sick trees. As the animation suggests, Queens has the highest density of sick trees in 1996 and Bronx has the highest density of sick tress in 2005. But in 2015, Manhattan has the highest density of sick trees. Manhattan also has the lowest ratio of healthy trees in the most recent 2015 survey. Therefore, more attention needs to be given to the tree management and maintenance in Manhattan particularly.
+```{r}
+data1995<-read.csv("1995_Street_Tree_Census.csv")
+data2005$boroname[(data2005$boroname==5)&(data2005$zipcode!=0)]<-"Staten Island"
+
+temp1<-data1995[-which(data1995$Zip_New==0),] 
+temp1$Borough<-as.factor(temp1$Borough)
+good_ratio_1995<-tapply(temp1$Condition,temp1$Borough,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Good"),2]/length(x); return(y2) })
+poor_ratio_1995<-tapply(temp1$Condition,temp1$Borough,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Poor"),2]/length(x); return(y2) })
+
+
+temp1<-data2005[-which(data2005$zipcode==0),]
+temp1$boroname<-as.factor(temp1$boroname)
+good_ratio_2005<-tapply(temp1$status,temp1$boroname,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Good"),2]/length(x); return(y2) })
+poor_ratio_2005<-tapply(temp1$status,temp1$boroname,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Poor"),2]/length(x); return(y2) })
+
+temp1<-data2015
+temp1$borough<-as.factor(temp1$borough)
+good_ratio_2015<-tapply(temp1$health,temp1$borough,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Good"),2]/length(x); return(y2) })
+poor_ratio_2015<-tapply(temp1$health,temp1$borough,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Poor"),2]/length(x); return(y2) })
+
+borough<-rep(names(good_ratio_2005),6)
+condition<-rep(rep(c("Good","Poor"),each=5),3)
+year<-rep(c(1996,2006,2016),each=10)
+ratio<-c(as.vector(good_ratio_1995),as.vector(poor_ratio_1995),as.vector(good_ratio_2005),as.vector(poor_ratio_2005),as.vector(good_ratio_2015),as.vector(poor_ratio_2015))
+tree_condition_data<-data.frame(borough,condition,year,ratio)
+
+g1<-ggplot(tree_condition_data, aes( x=seq(1,length(ratio)),y=ratio, size = ratio, colour =borough)) +
+  geom_point(alpha = 0.7, show.legend = TRUE) +
+  scale_size(range = c(2, 12)) +
+  labs( x="index",y = 'ratio') +geom_text(aes(x=20,y=0.2,label = as.factor(year)) , alpha = 0.2,  col = "gray", size = 20) +
+  facet_wrap(~condition) + 
+  transition_states(as.factor(year)) +
+  ease_aes('linear')
+knitr::include_graphics("g1.gif")
+```
+
+
+Furthermore, to better grasp the conditions of trees in different zip code areas. The next graph plots the density of sick trees against the amount of the trees in each zip city in 2005 and 2015. Overall, the total number of trees has increased across regions, while the percentage of bad trees has decreased, especially in Brooklyn. One should not assume obvious linear relationship between the density of sick trees and the amount of trees in certain zip city. That’s to say, the proportion of sick trees is not necessarily low in places with few trees, such as in Breezy Point. And areas with large amount of trees such as Bronx can have remarkably low density of sick trees.
+```{r}
+#clean data
+temp1<-data2015
+temp1$zip_city<-as.factor(temp1$zip_city)
+poor_ratio_2015<-tapply(temp1$health,temp1$zip_city,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Poor"),2]/length(x); return(y2) })
+poor_ratio_2015$Inwood<-0
+poor_ratio_2015<-unlist(poor_ratio_2015)
+tree_amount_2015<-table(data2015$zip_city)
+temp2<-data2005[-which(data2005$zipcode==0),]
+temp2<-temp2[(temp2$zip_city %in% unique(temp1$zip_city)),]
+poor_ratio_2005<-tapply(temp2$status,temp2$zip_city,function(x){y<-as.data.frame(table(x)); y2<-y[which(y[,1]=="Poor"),2]/length(x); return(y2) })
+poor_ratio_2005$Inwood<-0
+poor_ratio_2005<-unlist(poor_ratio_2005)
+tree_amount_2005<-table(data2005$zip_city)[(names(table(data2005$zip_city)) %in% unique(temp1$zip_city))]
+poor_ratio_2015<-poor_ratio_2015[names(poor_ratio_2015) %in% names(poor_ratio_2005)]
+tree_amount_2015<-tree_amount_2015[names(tree_amount_2015) %in% names(tree_amount_2005)]
+tree_amount<-c(as.vector(tree_amount_2005),as.vector(tree_amount_2015))
+poor_ratio<-c(as.vector(poor_ratio_2005),as.vector(poor_ratio_2015))
+year<-rep(c(2005,2015),each=length(tree_amount_2005))
+zip_city<-rep(names(tree_amount_2005),2)
+poor_tree_data<-data.frame(tree_amount,poor_ratio,year,zip_city)
+
+#plot
+ggplot(poor_tree_data, aes( x=tree_amount,y=poor_ratio, size =poor_ratio, colour =zip_city)) +
+  geom_point(alpha = 0.7, show.legend = TRUE) +
+  theme(legend.key.size = unit(10,"pt")) +
+  theme(legend.text = element_text(size = 5), legend.title = element_text(size = 8, face = "bold")) +
+  theme(legend.position = "bottom") +
+  scale_size(range = c(1, 5)) +  
+  labs( x="Tree amount",y = 'Density of poor trees') + 
+  facet_wrap(~year) +
+  labs(title="The density of sick trees by zip city in 2005 and 2015") + 
+  theme(axis.text.x = element_text(size = 8, angle = 30, hjust = 1, vjust = 1)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(),axis.line = element_line(colour = "black"))
+```
+
+
+Moreover, to get a clearer sense of the distribution of the trees in poor health conditions, the following plot shows the percentage of trees with a condition of poor status in each zip city in 2015. This not only can tell us which areas need to make more efforts in maintenance, but also can serve as an indicator of locations of trees that might pose dangers to pedestrians. Since lighter colors indicate higher percentage, Brooklyn will face the most danger from unhealthy trees. Staten Island will also face much more threats from unhealthy trees compared with other areas.
+```{r}
+#clean data
+temp1<-data2015[which(data2015$health=="Poor"),]
+temp1$zip_city<-as.factor(temp1$zip_city)
+ratio<-tapply(temp1$health,temp1$zip_city,length)/dim(temp1)[1]
+poor_ratio<-data.frame(zip=names(ratio),ratio=ratio)
+poor_2015_data<-merge(temp1,poor_ratio,by.x = "zip_city", by.y = "zip")
+poor_2015_data<-arrange(poor_2015_data, zip_city, tree_id)
+long_mean<-tapply(temp1$longitude,temp1$zip_city,mean)
+lat_mean<-tapply(temp1$latitude,temp1$zip_city,mean)
+long_data<-data.frame(zip=names(long_mean),long=long_mean)
+lat_data<-data.frame(zip=names(lat_mean),lat=lat_mean)
+poor_2015_data<-merge(poor_2015_data,long_data,by.x = "zip_city", by.y = "zip")
+poor_2015_data<-merge(poor_2015_data,lat_data,by.x = "zip_city", by.y = "zip")
+
+#plot
+ggplot(poor_2015_data, aes(x = longitude, y = latitude, group =zip_city, fill = ratio)) +
+  geom_polygon(colour = "grey90",size=0.01) +
+  coord_map("polyconic") +
+  labs(title="The ratio of poor trees by zip city in 2015") +
+  theme(panel.grid.major =element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(),axis.line = element_line(colour = "black"))
+```
+
+Tree Size:
+
+This project will also take a glimpse at the sizes of trees measured in terms of diameter ta breast height. Large tree species can exert more potential effects on our urban environment, especially in a densely populated metropolitan like NYC. Therefore, it is important to identify these specific large types since they can potentially produce more beneficial or harmful effects. In the following plot, we filter out 4 species with the largest average diameters in 1995, 2005, 2015. Apparently, each survey year has mostly different tree species with the largest average diameters. In the most recent year, London Planetree, Silver Maple, Eastern Cottonwood and Pin Oak possess the largest sizes. Hence, more attention should be given to these species in terms of their possible impacts on people's daily lives.
+In addition, there is a decreasing trend in the largest average size over three periods. This possibly means that the trees in NYC are becoming increasingly diversified and evenly spread. However, much more detailed comparison studies are needed to derive any conclusion.
+```{r}
+library(tidyverse)
+Average_Species_Diameter <- Diameter_Sidewalk_All %>% na.omit() %>% 
+  select(-Borough) %>% 
+  group_by(Year, Species) %>% 
+  summarise_at(vars(Diameter),list(Average = mean))
+Top_Average <-  Average_Species_Diameter %>% group_by(Year) %>% top_n(4, Average)
+
+ggplot(Top_Average, aes(x = Average, y = Species, fill = Year)) +
+  geom_segment(aes(yend = Species), xend = 0, colour = "grey50") +
+  geom_point(size = 3, aes(colour = Year)) +
+   scale_colour_brewer(palette = "Blues") +
+  scale_y_discrete(limits = c("ASH, BLUE", "WILLOW, CORKSCREW", "OAK, SOUTHERN RED", "HICKORY, SHAGBARK", "OAK, BLACK", "ELM, ROCK", "OSAGE-ORANGE", "WEEPING WILLOW", "LONDON PLANETREE", "MAPLE, SILVER", "COTTONWOOD, EASTERN", "OAK, PIN")) +
+  ggtitle("Species with the largest average diameters in 1995, 2005, 2015") +
+  xlab("Average length of diameter") +
+  theme_bw() +
+  theme(panel.grid.major.y = element_blank()) 
+```
+
+
+Again, just as in the tree health section, we plot the ratio of trees larger than 20 in diameter by zip city in 2015, This not only tells us where to put extra attention to these large species, but also can serve a reminder of locations where large trees might create risks to pedestrians.
+```{r}
+#clean data
+temp1<-data2015[which(data2015$stump_diam>20),]
+temp1$zip_city<-as.factor(temp1$zip_city)
+ratio<-tapply(temp1$stump_diam,temp1$zip_city,length)/dim(temp1)[1]
+diam_ratio<-data.frame(zip=names(ratio),ratio=ratio)
+diam_2015_data<-merge(temp1,diam_ratio,by.x = "zip_city", by.y = "zip")
+diam_2015_data<-arrange(diam_2015_data, zip_city, tree_id)
+long_mean<-tapply(temp1$longitude,temp1$zip_city,mean)
+lat_mean<-tapply(temp1$latitude,temp1$zip_city,mean)
+long_data<-data.frame(zip=names(long_mean),long=long_mean)
+lat_data<-data.frame(zip=names(lat_mean),lat=lat_mean)
+diam_2015_data<-merge(diam_2015_data,long_data,by.x = "zip_city", by.y = "zip")
+diam_2015_data<-merge(diam_2015_data,lat_data,by.x = "zip_city", by.y = "zip")
+
+#plot
+ggplot(diam_2015_data, aes(x = longitude, y = latitude, group =zip_city, fill = ratio)) +
+  geom_polygon(colour = "grey90",size=0.01) +
+  coord_map("polyconic") +
+  labs(title="The ratio of trees larger than 20 in diameter by zip city in 2015") +
+  theme(panel.grid.major =element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(),axis.line = element_line(colour = "black"))
+```
+
+Surrounding structure of trees:
+
+Last but not least, we investigate the conditions of the surrounding structures of the trees to figure out how to better manage NYC tree ecosystem. These structures include sidewalks, guards, supports, wires, canopies and so much more. In this project, we select the sidewalks and guards to disucss their relationships with the tree system.
+For the conditions of sidewalk, as seen in the plot below, there is slight decrease in the number of good sidewalk but a marked increase in the number of sidewalks in damaged conditions. These could be caused by other factors such as weather. But the proximity to trees means that most likely it is casued by the expansion of root growth. Therefore, this indicates that government ought to act on maintaining the sidewalks, especially in Brooklyn and Queens to prevent future injuries.
+```{r}
+#clean data
+Diameter_Sidewalk_Overview <- Tree_Census %>% select(Borough, Spc_Common, Diameter, Sidewalk_Condition) %>% rename(Species = Spc_Common)
+Diameter_Sidewalk_Overview2 <- Tree_Census2 %>% select(boroname, spc_common, tree_dbh, sidw_raise) %>% rename(Species = spc_common, Borough = boroname, Diameter = tree_dbh, Sidewalk_Condition = sidw_raise)
+Diameter_Sidewalk_Overview3 <- Tree_Census3 %>% select(borough, spc_common, tree_dbh, sidewalk) %>% rename(Species = spc_common, Borough = borough, Diameter = tree_dbh, Sidewalk_Condition = sidewalk)
+Diameter_Sidewalk_Overview$Sidewalk_Condition[Diameter_Sidewalk_Overview$Sidewalk_Condition == "Raised"] <- "Damage"
+Diameter_Sidewalk_Overview2$Borough[Diameter_Sidewalk_Overview2$Borough == "5"] <- "Staten Island"
+Diameter_Sidewalk_Overview2$Sidewalk_Condition[Diameter_Sidewalk_Overview2$Sidewalk_Condition == "No"] <- "Good"
+Diameter_Sidewalk_Overview2$Sidewalk_Condition[Diameter_Sidewalk_Overview2$Sidewalk_Condition == "Yes"] <- "Damage"
+Diameter_Sidewalk_Overview3$Sidewalk_Condition[Diameter_Sidewalk_Overview3$Sidewalk_Condition == "NoDamage"] <- "Good"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "eastern cottonwood"] <- "COTTONWOOD, EASTERN"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "London planetree"] <- "LONDON PLANETREE"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "pin oak"] <- "OAK, PIN"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "silver maple"] <- "MAPLE, SILVER"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "weeping willow"] <- "WEEPING, WILLOW"
+Diameter_Sidewalk_Overview$Year <- "1995"
+Diameter_Sidewalk_Overview2$Year <- "2005"
+Diameter_Sidewalk_Overview3$Year <- "2015"
+Diameter_Sidewalk_All <- rbind(Diameter_Sidewalk_Overview, Diameter_Sidewalk_Overview2, Diameter_Sidewalk_Overview3)
+
+#plot
+Diameter_Sidewalk_All %>% na.omit() %>% 
+  group_by(Year, Borough, Sidewalk_Condition) %>% 
+  summarise(count = n()) %>% 
+  ggplot(aes(x = Borough, y = count, fill = Sidewalk_Condition))+
+         geom_col(position = "dodge", width = 0.5)+
+  facet_grid(. ~ Year)+
+  ggtitle("Sidewalk condition in 1995, 2005, 2015") +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 8, angle = 30, hjust = 1, vjust = 1))+
+  theme(panel.grid.major.x = element_blank()) 
+```
+
+
+Tree guards' relationship with trees is rather mixed. These guards include preimeter guard, stakes or even wires. They may be put there for the benefits of trees or not. Hence, from the graphs, there might not be any direct link between the two. Yet, it is noteworthy that in 2005, the presence of guards actually corresponds to a higher proportion of trees in poor health condition. This reminds people of the harms of artificial constraints might have on tree species.
+```{r}
+#clean data
+Health_Guard_Overview <- Tree_Census %>% select(Borough, Condition, Support_Structure) %>% rename(Health = Condition, Guard = Support_Structure)
+Health_Guard_Overview2 <- Tree_Census2 %>% select(boroname, status, inf_guard) %>% rename(Borough = boroname, Health = status, Guard = inf_guard)
+Health_Guard_Overview3 <- Tree_Census3 %>% select(borough, health, guards) %>% rename(Borough = borough, Health = health, Guard = guards)
+Health_Guard_Overview2$Borough[Health_Guard_Overview2$Borough == "5"] <- "Staten Island"
+Health_Guard_Overview2$Guard[Health_Guard_Overview2$Guard == "No"] <- "None"
+Health_Guard_Overview$Guard[Health_Guard_Overview$Guard == "Guard Strangling"] <- "Yes"
+Health_Guard_Overview$Guard[Health_Guard_Overview$Guard == "Perimeter Guard"] <- "Yes"
+Health_Guard_Overview$Guard[Health_Guard_Overview$Guard == "Stakes / Wires"] <- "Yes"
+Health_Guard_Overview$Health[Health_Guard_Overview$Health == "Fair"] <- "Excellent"
+Health_Guard_Overview3$Health[Health_Guard_Overview3$Health == "Fair"] <- "Excellent"
+Health_Guard_Overview3$Guard[Health_Guard_Overview3$Guard == "Harmful"] <- "Yes"
+Health_Guard_Overview3$Guard[Health_Guard_Overview3$Guard == "Helpful"] <- "Yes"
+Health_Guard_Overview$Year <- "1995"
+Health_Guard_Overview2$Year <- "2005"
+Health_Guard_Overview3$Year <- "2015"
+Health_Guard_All <- rbind(Health_Guard_Overview, Health_Guard_Overview2, Health_Guard_Overview3)
+
+#plot
+Health_Guard_Overview %>% filter(Health %in% c("Excellent", "Good", "Poor")) %>% ggplot(aes(x = Borough, fill = Health)) +
+  geom_bar(width = 0.5, position = "fill") +
+  facet_grid(. ~ Guard) +
+  ggtitle("Relationship between tree health and presence of guard in 1995") +
+  theme_bw()+
+  scale_fill_brewer() +
+  theme(axis.text.x = element_text(size = 8, angle = 30, hjust = 1, vjust = 1))+
+  theme(panel.grid.major.x = element_blank()) 
+
+Health_Guard_Overview2 %>% filter(Health %in% c("Excellent", "Good", "Poor")) %>% ggplot(aes(x = Borough, fill = Health)) +
+  geom_bar(width = 0.5, position = "fill") +
+  facet_grid(. ~ Guard) +
+  ggtitle("Relationship between tree health and presence of guard in 2005") +
+  scale_fill_brewer() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 8, angle = 30, hjust = 1, vjust = 1))+
+  theme(panel.grid.major.x = element_blank()) 
+
+Health_Guard_Overview3 %>% na.omit() %>% filter(Health %in% c("Excellent", "Good", "Poor")) %>% filter(Guard %in% c("None", "Yes")) %>% ggplot(aes(x = Borough, fill = Health)) +
+  geom_bar(width = 0.5, position = "fill") +
+  facet_grid(. ~ Guard) +
+  ggtitle("Relationship between tree health and presence of guard in 2015") +
+  scale_fill_brewer() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 8, angle = 30, hjust = 1, vjust = 1))+
+  theme(panel.grid.major.x = element_blank()) 
+```
+=======
+```{r}
+
+```
+
+>>>>>>> 697738e68e417858559f05bae84bec81210852a0
+
+<!--chapter:end:05-results.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Interactive component
+
+In this interactive plot, we can find the location of the commonly used trees which are in poor health condition. While we click on each mark for one tree, we can see the specific species of that tree. And the real location for that tree in poor health condition is marked on the map. With this map, we can easily find which tree we need to do some treatment to help them to recover.
+
+Find the top 4 commonly used tree species during 2015 in NYC
+```{r}
+sort(table(census2015_1$Species), decreasing = TRUE)[1:4]
+```
+
+
+```{r}
+library(httr)
+library(rgdal)
+library(sp)
+library(leaflet)
+r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
+nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
+```
+
+We filter out the commonly used tree with poor health condition in 2015.
+```{r}
+tree_point<-census2015%>%
+  filter(health == "Poor")%>%
+  filter(spc_latin=="Platanus x acerifolia"|spc_latin=="Gleditsia triacanthos var. inermis"|spc_latin=="Pyrus calleryana"|spc_latin=="Quercus palustris")%>%
+  select(spc_latin,longitude,latitude)
+head(tree_point)
+```
+
+```{r}
+library(leaflet)
+leaflet(nyc_neighborhoods) %>%
+  addTiles() %>% 
+  addPolygons(popup = ~neighborhood) %>% 
+  addMarkers(~longitude, ~latitude, popup = ~spc_latin, data = tree_point) %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  setView(-73.98, 40.75, zoom = 13)
+```
+
+<!--chapter:end:06-interactive.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Conclusion
+
+
+<!--chapter:end:07-conclusion.Rmd-->
+
