@@ -17,7 +17,7 @@ library(ggplot2)
 library(gganimate)
 Tree_Census <- read_csv("1995_Street_Tree_Census.csv")
 Tree_Census2 <- read_csv("2005_Street_Tree_Census.csv")
-Tree_Census3 <- read_csv("2015_Street_Tree_Census.csv")
+Tree_Census3 <- read_csv("2015_Street_Tree_Census_-_Tree_Data.csv")
 
 #clean data
 Tree_Diversity_Overview <- Tree_Census %>% select(Borough, Spc_Common) %>% rename(Species = Spc_Common)
