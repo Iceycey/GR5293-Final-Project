@@ -216,7 +216,25 @@ Tree Size:
 This project will also take a glimpse at the sizes of trees measured in terms of diameter ta breast height. Large tree species can exert more potential effects on our urban environment, especially in a densely populated metropolitan like NYC. Therefore, it is important to identify these specific large types since they can potentially produce more beneficial or harmful effects. In the following plot, we filter out 4 species with the largest average diameters in 1995, 2005, 2015. Apparently, each survey year has mostly different tree species with the largest average diameters. In the most recent year, London Planetree, Silver Maple, Eastern Cottonwood and Pin Oak possess the largest sizes. Hence, more attention should be given to these species in terms of their possible impacts on people's daily lives.
 In addition, there is a decreasing trend in the largest average size over three periods. This possibly means that the trees in NYC are becoming increasingly diversified and evenly spread. However, much more detailed comparison studies are needed to derive any conclusion.
 ```{r}
-library(tidyverse)
+#clean data
+Diameter_Sidewalk_Overview <- Tree_Census %>% select(Borough, Spc_Common, Diameter, Sidewalk_Condition) %>% rename(Species = Spc_Common)
+Diameter_Sidewalk_Overview2 <- Tree_Census2 %>% select(boroname, spc_common, tree_dbh, sidw_raise) %>% rename(Species = spc_common, Borough = boroname, Diameter = tree_dbh, Sidewalk_Condition = sidw_raise)
+Diameter_Sidewalk_Overview3 <- Tree_Census3 %>% select(borough, spc_common, tree_dbh, sidewalk) %>% rename(Species = spc_common, Borough = borough, Diameter = tree_dbh, Sidewalk_Condition = sidewalk)
+Diameter_Sidewalk_Overview$Sidewalk_Condition[Diameter_Sidewalk_Overview$Sidewalk_Condition == "Raised"] <- "Damage"
+Diameter_Sidewalk_Overview2$Borough[Diameter_Sidewalk_Overview2$Borough == "5"] <- "Staten Island"
+Diameter_Sidewalk_Overview2$Sidewalk_Condition[Diameter_Sidewalk_Overview2$Sidewalk_Condition == "No"] <- "Good"
+Diameter_Sidewalk_Overview2$Sidewalk_Condition[Diameter_Sidewalk_Overview2$Sidewalk_Condition == "Yes"] <- "Damage"
+Diameter_Sidewalk_Overview3$Sidewalk_Condition[Diameter_Sidewalk_Overview3$Sidewalk_Condition == "NoDamage"] <- "Good"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "eastern cottonwood"] <- "COTTONWOOD, EASTERN"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "London planetree"] <- "LONDON PLANETREE"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "pin oak"] <- "OAK, PIN"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "silver maple"] <- "MAPLE, SILVER"
+Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "weeping willow"] <- "WEEPING, WILLOW"
+Diameter_Sidewalk_Overview$Year <- "1995"
+Diameter_Sidewalk_Overview2$Year <- "2005"
+Diameter_Sidewalk_Overview3$Year <- "2015"
+Diameter_Sidewalk_All <- rbind(Diameter_Sidewalk_Overview, Diameter_Sidewalk_Overview2, Diameter_Sidewalk_Overview3)
+
 Average_Species_Diameter <- Diameter_Sidewalk_All %>% na.omit() %>% 
   select(-Borough) %>% 
   group_by(Year, Species) %>% 
@@ -264,25 +282,6 @@ Surrounding structure of trees:
 Last but not least, we investigate the conditions of the surrounding structures of the trees to figure out how to better manage NYC tree ecosystem. These structures include sidewalks, guards, supports, wires, canopies and so much more. In this project, we select the sidewalks and guards to disucss their relationships with the tree system.
 For the conditions of sidewalk, as seen in the plot below, there is slight decrease in the number of good sidewalk but a marked increase in the number of sidewalks in damaged conditions. These could be caused by other factors such as weather. But the proximity to trees means that most likely it is casued by the expansion of root growth. Therefore, this indicates that government ought to act on maintaining the sidewalks, especially in Brooklyn and Queens to prevent future injuries.
 ```{r}
-#clean data
-Diameter_Sidewalk_Overview <- Tree_Census %>% select(Borough, Spc_Common, Diameter, Sidewalk_Condition) %>% rename(Species = Spc_Common)
-Diameter_Sidewalk_Overview2 <- Tree_Census2 %>% select(boroname, spc_common, tree_dbh, sidw_raise) %>% rename(Species = spc_common, Borough = boroname, Diameter = tree_dbh, Sidewalk_Condition = sidw_raise)
-Diameter_Sidewalk_Overview3 <- Tree_Census3 %>% select(borough, spc_common, tree_dbh, sidewalk) %>% rename(Species = spc_common, Borough = borough, Diameter = tree_dbh, Sidewalk_Condition = sidewalk)
-Diameter_Sidewalk_Overview$Sidewalk_Condition[Diameter_Sidewalk_Overview$Sidewalk_Condition == "Raised"] <- "Damage"
-Diameter_Sidewalk_Overview2$Borough[Diameter_Sidewalk_Overview2$Borough == "5"] <- "Staten Island"
-Diameter_Sidewalk_Overview2$Sidewalk_Condition[Diameter_Sidewalk_Overview2$Sidewalk_Condition == "No"] <- "Good"
-Diameter_Sidewalk_Overview2$Sidewalk_Condition[Diameter_Sidewalk_Overview2$Sidewalk_Condition == "Yes"] <- "Damage"
-Diameter_Sidewalk_Overview3$Sidewalk_Condition[Diameter_Sidewalk_Overview3$Sidewalk_Condition == "NoDamage"] <- "Good"
-Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "eastern cottonwood"] <- "COTTONWOOD, EASTERN"
-Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "London planetree"] <- "LONDON PLANETREE"
-Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "pin oak"] <- "OAK, PIN"
-Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "silver maple"] <- "MAPLE, SILVER"
-Diameter_Sidewalk_Overview3$Species[Diameter_Sidewalk_Overview3$Species == "weeping willow"] <- "WEEPING, WILLOW"
-Diameter_Sidewalk_Overview$Year <- "1995"
-Diameter_Sidewalk_Overview2$Year <- "2005"
-Diameter_Sidewalk_Overview3$Year <- "2015"
-Diameter_Sidewalk_All <- rbind(Diameter_Sidewalk_Overview, Diameter_Sidewalk_Overview2, Diameter_Sidewalk_Overview3)
-
 #plot
 Diameter_Sidewalk_All %>% na.omit() %>% 
   group_by(Year, Borough, Sidewalk_Condition) %>% 
@@ -345,4 +344,3 @@ Health_Guard_Overview3 %>% na.omit() %>% filter(Health %in% c("Excellent", "Good
   theme(axis.text.x = element_text(size = 8, angle = 30, hjust = 1, vjust = 1))+
   theme(panel.grid.major.x = element_blank()) 
 ```
-
