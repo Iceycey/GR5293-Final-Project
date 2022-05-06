@@ -73,7 +73,7 @@ Next, we look at the ratio of those most popular tree species against all tree s
 ```{r}
 #import data
 data2005<-read.csv("2005_Street_Tree_Census.csv")
-data2015<-read.csv("2015_Street_Tree_Census.csv")
+data2015<-read.csv("2015_Street_Tree_Census_-_Tree_Data.csv")
 
 #clean data
 temp1<-data2005[-which(data2005$zipcode==0),]
