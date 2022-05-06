@@ -11,10 +11,7 @@ As we know,the United States collects census data every ten years. By collecting
 
 "Tree canopy confers ecological, economic, and social benefits and can be used to enhance neighborhoods disproportionately affected by environmental challenges such as excessive heat, impervious surfaces, and air pollution." Trees are valuable resources for our daily life.
 
-In New York city, the New York City Department of Parks & Recreation also collects the tree census every ten years from 1995. Up until now, we have the access toward three decades' tree census data. This data information gives us opportunities to analyze the density change over these three decades. Trees' health is strongly affected by neighbor. So, the trees' health condition in the dataset can help us to determine the suitable tree species for different district with various surroundings. By collecting these three decades information about urban forest, we can compare the change of favorable tree species.
+In New York city, the New York City Department of Parks & Recreation also collects the tree census every ten years from 1995. Up until now, we have the access toward three decades’ tree census data. This data information gives us opportunities to analyze the changing patterns of NYC tree ecosystem over these three decades. Actively seeking ways to improve management trees ecosystem is important since trees’ health relies on these efforts. There are various intriguing aspects and features included in these datasets that can help us to discover potential issues and take actions. By collecting these three decades information about NYC urban forest, we can harness various patterns of change in our efforts to improve and maintain our tree ecosystem. 
 
-In this report, we will use current available three decades of tree census data sets to do some deep analysis of the urban forest in New York.
-
-
-
+In this report, we will use tree census data sets from 1995, 2005 and 2015 to conduct exploratory data visualization of the urban forest in New York, in the hope of discovering some useful insights.
 

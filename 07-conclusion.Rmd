@@ -1,2 +1,13 @@
 # Conclusion
 
+In a nutshell, this project applies multiple data visualization tools and approaches to provide some fresh perspectives on NYC tree ecosystem. In the process, by analyzing aspects such as tree diversity, tree health, tree size and the surrounding structure, we find out the following potentially helpful suggestions:
+
+1. Callery Pear’s quick fall in quantity in the recent two decades triggers alarm. Investigation is needed to identify possibly intractable problems like contagious plant diseases.
+
+2. In the most recent decade, Manhattan surpasses other boroughs and becomes the district with the highest density of sick trees. Manhattan also has the lowest ratio of healthy trees in the most recent survey. Extra attention needs to be given to the tree management and maintenance in Manhattan particularly.
+
+3. The distribution of the sick tree ratio shows alarming locations like Breezy Point where clearly intervention is needed urgently.
+
+4. While it appears that there is no tree that has a very large diameter and is unhealthy. We believe that trees with a diameter greater than 20 or trees with a status of "Poor" will pose a possible danger to pedestrians(i.e. falling branches etc.) Brooklyn will face the most danger from large trees and unhealthy trees. Precaution is needed to prevent future tragedies.
+
+5. There is a prominent increase in the number of sidewalks in damaged conditions near trees. Root expansion is likely to be the cause. Local government in Brooklyn and Queens should start to renovate sidewalks to prevent pedestrians’injuries.
