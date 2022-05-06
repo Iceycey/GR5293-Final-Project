@@ -1,5 +1,7 @@
 # Conclusion
 
+## Project Conclusion
+
 In a nutshell, this project applies multiple data visualization tools and approaches to provide some fresh perspectives on NYC tree ecosystem. In the process, by analyzing aspects such as tree diversity, tree health, tree size and the surrounding structure, we find out the following potentially helpful suggestions:
 
 1. Callery Pear’s quick fall in quantity in the recent two decades triggers alarm. Investigation is needed to identify possibly intractable problems like contagious plant diseases.
@@ -10,4 +12,8 @@ In a nutshell, this project applies multiple data visualization tools and approa
 
 4. While it appears that there is no tree that has a very large diameter and is unhealthy. We believe that trees with a diameter greater than 20 or trees with a status of "Poor" will pose a possible danger to pedestrians(i.e. falling branches etc.) Brooklyn will face the most danger from large trees and unhealthy trees. Precaution is needed to prevent future tragedies.
 
-5. There is a prominent increase in the number of sidewalks in damaged conditions near trees. Root expansion is likely to be the cause. Local government in Brooklyn and Queens should start to renovate sidewalks to prevent pedestrians’injuries.
+5. There is a prominent increase in the number of sidewalks in damaged conditions near trees. Root expansion is likely to be the cause. Local government in Brooklyn and Queens should start to renovate sidewalks to prevent pedestrians’ injuries.
+
+## Project Limitations
+
+The massive data sets can at times make it hard to tidy and run our codes. Also, zip code area should be replaced with more legible forms of division. Some compromises have to be made due to data and time limitation as well as lack in experience. All in all, This project has been a great learning experience.
